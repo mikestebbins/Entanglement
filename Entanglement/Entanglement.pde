@@ -1,11 +1,17 @@
 int totalParticles = 60;
+float incrementStep = 0.005;
+int ellipseSize = 10;
 
 int minAmp = 70;
 int maxAmp = 100;
 int minPeriod = 100;
 int maxPeriod = 200;
-int ellipseSize = 20;
+
 int count = 0;
+float sumAmplitude = 0.0;
+float meanAmplitude = 0.0;
+float sumPeriod = 0.0;
+float meanPeriod = 0.0;
 
 Particle[] parray = new Particle[totalParticles];
 
@@ -23,11 +29,6 @@ void setup() {
   }
   
 //Calculate averages for each parameter, to start modifying each particle towards
-  float sumAmplitude = 0.0;
-  float meanAmplitude = 0.0;
-  float sumPeriod = 0.0;
-  float meanPeriod = 0.0;
-  
   for (int i = 0; i < parray.length; i++) {
     Particle p = parray[i];
     float[] temp = p.getValues();
@@ -51,13 +52,27 @@ void draw() {
  
   for (int i = 0; i < parray.length; i++) {
     Particle p = parray[i];
+    
+    float[] temp = p.getValues();
+    float currentAmplitude = temp[0];
+    float currentPeriod = temp[1];
+    
+    float newAmplitude = currentAmplitude - ((currentAmplitude - meanAmplitude) * incrementStep);  
+    float newPeriod = currentPeriod - ((currentPeriod - meanPeriod) * incrementStep);
+    
+    print("newAmplitude = ");
+    println(newAmplitude);
+    print("newPeriod = ");
+    println(newPeriod);
+    
+    p.modifyAmplitude(newAmplitude);
+    p.modifyPeriod(newPeriod);    
+    
     p.display();
-    if (count%10 == 0)  {
-      p.modifyAmplitude();
-    }
-  }
+
   //print("frameRate = ");
   //println(frameRate);
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -93,12 +108,11 @@ class Particle
     return values;
   }
 
-  void modifyAmplitude()  {
-    if (amplitude > 0)  {
-    amplitude = amplitude - 1;
-    }
-    else  {
-      amplitude = 0;
-    }
+  void modifyAmplitude(float newAmplitude)  {
+    amplitude = newAmplitude;
+  }
+  
+  void modifyPeriod(float newPeriod)  {
+    period = newPeriod;
   }
 }
