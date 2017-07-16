@@ -1,5 +1,5 @@
-int totalParticles = 100;
-int circleSize = 20;
+int totalParticles = 200;
+int circleSize = 10;
 int backgroundColor = 255;
 int circleColor = 50;
 
@@ -19,6 +19,9 @@ float meanPeriod = 0.0;
 float sumPhase = 0.0;
 float meanPhase = 0.0;
 
+PVector[] activeCircles = new PVector[totalParticles];
+PVector[] candidateCircles = new PVector[totalParticles];
+
 Particle[] parray = new Particle[totalParticles];
 
 //-----------------------------------------------------------------------------
@@ -29,13 +32,18 @@ void setup() {
   stroke(circleColor);
   smooth(4);
   frameRate(60);
+  
+  evenDistributedRandomPoints();
+  println("Made it here");
 
   for (int i = 0; i < parray.length; i++)  {
+    PVector temp = activeCircles[i];
+    
     float amplitude = random(minAmp,maxAmp);
     float period = random(minPeriod,maxPeriod);
     float phase = random(minPhase,maxPhase);
-    float xpos = random(width);
-    float ypos = random(height);
+    float xpos = temp.x;
+    float ypos = temp.y;
     parray[i] = new Particle(amplitude,period,phase,xpos,ypos);
   }
   
@@ -136,5 +144,57 @@ class Particle
   void modifyPhase(float newPhase)  {
     phase = newPhase;
   }
+}
 
+//-----------------------------------------------------------------------------
+// from random circles with mitchells best candidate algorithm for seeding dots
+void evenDistributedRandomPoints ()  {
+
+  int counter = 0; 
+  
+  while (counter < totalParticles)  {
+    
+    if (counter == 0)  {
+      activeCircles[counter] = new PVector(random(0,width),random(0,height));  
+      float[] f = activeCircles[counter].array();
+      counter++;
+    }
+    
+    if ((counter != 0) && (counter < totalParticles))  {
+      //Generate new random coords arrays
+      for (int i = 0; i < totalParticles; i++)  {
+        candidateCircles[i] = new PVector(random(0,width),random(0,height));
+      }
+      //For each of the new candidate points, test it's distance from each existing point
+      float maxDist = 0;
+      int maxDistIndex = 9999;
+      
+      for (int i = 0; i < totalParticles; i++)  {    
+        float minDist = 9999;
+        int minDistIndex = 9999;
+        
+        for (int j = 0; j < counter; j++)  {      
+          PVector v1 = candidateCircles[i];      
+          PVector v2 = activeCircles[j];
+          
+          float dist = PVector.dist(v1,v2);
+          
+          if (dist < minDist)  {
+            minDist = dist;
+            minDistIndex = j;
+          }
+        }
+        
+        if (minDist >= maxDist)  {
+          maxDist = minDist;
+          maxDistIndex = i;  
+        }
+      }
+      
+      PVector keeper = candidateCircles[maxDistIndex];
+      activeCircles[counter] = keeper;
+      float[] f = activeCircles[counter].array();
+      counter++;
+    }
+  }  
 }
