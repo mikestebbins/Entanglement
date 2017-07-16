@@ -97,10 +97,14 @@ void draw() {
     p.modifyPhase(newPhase);
     
     p.display();
-
-  print("frameRate = ");
-  println(frameRate);
   }
+  //print("frameRate = ");
+  //println(frameRate);
+  print("frameCount = ");
+  println(frameCount);
+  
+  //// Saves each frame as line-000001.png, line-000002.png, etc.
+  //saveFrame("line-######.png");
 }
 
 //-----------------------------------------------------------------------------
