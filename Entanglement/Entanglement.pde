@@ -1,7 +1,7 @@
-int totalParticles = 200;
-int circleSize = 10;
+int totalParticles = 500;
+int circleSize = 4;
 int backgroundColor = 255;
-int circleColor = 50;
+int circleColor = 0;
 
 float incrementStep = 0.005;
 int minAmp = 70;
@@ -155,7 +155,7 @@ void evenDistributedRandomPoints ()  {
   while (counter < totalParticles)  {
     
     if (counter == 0)  {
-      activeCircles[counter] = new PVector(random(0,width),random(0,height));  
+      activeCircles[counter] = new PVector(random(-maxAmp, width + maxAmp),random(-maxAmp, height + maxAmp));  
       float[] f = activeCircles[counter].array();
       counter++;
     }
@@ -163,7 +163,7 @@ void evenDistributedRandomPoints ()  {
     if ((counter != 0) && (counter < totalParticles))  {
       //Generate new random coords arrays
       for (int i = 0; i < totalParticles; i++)  {
-        candidateCircles[i] = new PVector(random(0,width),random(0,height));
+        candidateCircles[i] = new PVector(random(-maxAmp, width + maxAmp),random(-maxAmp, height + maxAmp));
       }
       //For each of the new candidate points, test it's distance from each existing point
       float maxDist = 0;
