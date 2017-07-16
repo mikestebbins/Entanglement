@@ -22,10 +22,10 @@ void setup() {
     parray[i] = new Particle(random(minAmp,maxAmp),random(minPeriod,maxPeriod),random(width),random(height),random(0,1));
   }
   
-//Calculate initials for each parameter, to start normalizing against
-  float sumAmplitude = 0;
+//Calculate averages for each parameter, to start modifying each particle towards
+  float sumAmplitude = 0.0;
   float meanAmplitude = 0.0;
-  float sumPeriod = 0;
+  float sumPeriod = 0.0;
   float meanPeriod = 0.0;
   
   for (int i = 0; i < parray.length; i++) {
@@ -42,8 +42,8 @@ void setup() {
   println(meanAmplitude);
   print("meanPeriod = ");
   println(meanPeriod);
- 
 }
+
 //-----------------------------------------------------------------------------
 void draw() {
   background(255);
