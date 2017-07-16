@@ -9,6 +9,7 @@ int count = 0;
 
 Particle[] parray = new Particle[totalParticles];
 
+//-----------------------------------------------------------------------------
 void setup() {
   size(640,640);
   background(255);
@@ -16,20 +17,20 @@ void setup() {
   smooth(4);
   frameRate(60);
 
-// Particle(int iamplitude, int iperiod, float ixpos, float iypos, int idirection)  {
+// Particle(float iamplitude, float iperiod, float ixpos, float iypos, int idirection)  {
   for (int i = 0; i < parray.length; i++)  {
-    parray[i] = new Particle(int(random(minAmp,maxAmp)),int(random(minPeriod,maxPeriod)),random(width),random(height),random(0,1));
+    parray[i] = new Particle(random(minAmp,maxAmp),random(minPeriod,maxPeriod),random(width),random(height),random(0,1));
   }
   
 //Calculate initials for each parameter, to start normalizing against
-  int sumAmplitude = 0;
+  float sumAmplitude = 0;
   float meanAmplitude = 0.0;
-  int sumPeriod = 0;
+  float sumPeriod = 0;
   float meanPeriod = 0.0;
   
   for (int i = 0; i < parray.length; i++) {
     Particle p = parray[i];
-    int[] temp = p.getValues();
+    float[] temp = p.getValues();
     sumAmplitude = sumAmplitude + temp[0];
     sumPeriod = sumPeriod + temp[1];
   }
@@ -43,7 +44,7 @@ void setup() {
   println(meanPeriod);
  
 }
-
+//-----------------------------------------------------------------------------
 void draw() {
   background(255);
   count++;
@@ -52,22 +53,23 @@ void draw() {
     Particle p = parray[i];
     p.display();
     if (count%10 == 0)  {
-      p.modAmp();
+      p.modifyAmplitude();
     }
   }
   //print("frameRate = ");
   //println(frameRate);
 }
 
+//-----------------------------------------------------------------------------
 class Particle
 {
-  int amplitude;
-  int period;
+  float amplitude;
+  float period;
   float xpos;
   float ypos;
   float direction;
   
-  Particle(int iamplitude, int iperiod, float ixpos, float iypos, float idirection)  {
+  Particle(float iamplitude, float iperiod, float ixpos, float iypos, float idirection)  {
     amplitude = iamplitude;
     period = iperiod;
     xpos = ixpos;
@@ -84,14 +86,14 @@ class Particle
     ellipse(x,ypos,ellipseSize,ellipseSize);
   }
 
-  int[] getValues()  {
-    int[] values = new int[2];
+  float[] getValues()  {
+    float[] values = new float[2];
     values[0] = amplitude;
     values[1] = period;
     return values;
   }
 
-  void modAmp()  {
+  void modifyAmplitude()  {
     if (amplitude > 0)  {
     amplitude = amplitude - 1;
     }
@@ -99,5 +101,4 @@ class Particle
       amplitude = 0;
     }
   }
-
 }
