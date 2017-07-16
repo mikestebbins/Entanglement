@@ -36,7 +36,6 @@ void setup() {
     float phase = random(minPhase,maxPhase);
     float xpos = random(width);
     float ypos = random(height);
-    
     parray[i] = new Particle(amplitude,period,phase,xpos,ypos);
   }
   
